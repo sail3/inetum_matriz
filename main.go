@@ -24,13 +24,24 @@ func main() {
 // InitServe: iniciamos el servidor.
 func InitServe() *gin.Engine {
 	r := gin.Default()
-
+	r.Use(Cors())
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "welcome to pandemic's time",
 		})
 	})
+	NewRotateMatrix().Routes(r)
 	// TODO: si queremos implementar nuevas rutas debemos crear nuevas
 	// estructuras de tipo Module e implementar la interfaz ModuleInterfaz despues invocarlas.
 	return r
+}
+
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.Header.Get("Content-Type") != "application/json" {
+			c.AbortWithStatus(http.StatusUnsupportedMediaType)
+			return
+		}
+		c.Next()
+	}
 }
