@@ -54,6 +54,7 @@ var application = InitServe()
 func TestIndexRoute(t *testing.T) {
 	w := httptest.NewRecorder()
 	request, _ := http.NewRequest("GET", "/", nil)
+	request.Header.Add("Content-Type", "application/json")
 	application.ServeHTTP(w, request)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
@@ -63,6 +64,7 @@ func TestRotateMatrixRoute(t *testing.T) {
 	w := httptest.NewRecorder()
 	input := "{\"matrix\":[[1,2],[3,4]]}"
 	request, _ := http.NewRequest("POST", "/rotate-matrix/", strings.NewReader(input))
+	request.Header.Add("Content-Type", "application/json")
 	application.ServeHTTP(w, request)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
@@ -73,6 +75,7 @@ func TestRotateMatrixPayloadRoute(t *testing.T) {
 	input := "{\"matrix\":[[1,2],[3,4]]}"
 	output := "{\"matrix\":[[2,4],[1,3]]}"
 	request, _ := http.NewRequest("POST", "/rotate-matrix/", strings.NewReader(input))
+	request.Header.Add("Content-Type", "application/json")
 	application.ServeHTTP(w, request)
 	assert.Equal(t, output, w.Body.String())
 }
