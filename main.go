@@ -1,20 +1,36 @@
 package main
 
-func main() {
+import (
+	"net/http"
 
+	"github.com/gin-gonic/gin"
+)
+
+// Module: estructura para los modulos a implementar
+type Module struct {
+	URL string
 }
 
-// RotarMatriz: Rota una matriz NxN
-func RotarMatriz(matrizOriginal [][]int) [][]int {
-	x := len(matrizOriginal)
-	matrizRotada := make([][]int, x)
-	for v := range matrizRotada {
-		matrizRotada[v] = make([]int, x)
-	}
-	for indexRow, row := range matrizOriginal {
-		for indexCol, item := range row {
-			matrizRotada[x-indexCol-1][indexRow] = item
-		}
-	}
-	return matrizRotada
+// ModuleInterface: interfaz para el modulo de rutas a implementar.
+type ModuleInterface interface {
+	Routes(gin.Engine)
+}
+
+func main() {
+	r := InitServe()
+	r.Run(":8080")
+}
+
+// InitServe: iniciamos el servidor.
+func InitServe() *gin.Engine {
+	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "welcome to pandemic's time",
+		})
+	})
+	// TODO: si queremos implementar nuevas rutas debemos crear nuevas
+	// estructuras de tipo Module e implementar la interfaz ModuleInterfaz despues invocarlas.
+	return r
 }
