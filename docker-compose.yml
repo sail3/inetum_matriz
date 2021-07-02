@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    restart: always
+    volumes:
+      - .:/go/src/github.com/sail3/inetum_matriz
+    networks:
+      - BackEnd
+networks:
+  BackEnd:
+    driver: bridge
